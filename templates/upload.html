@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fracture Detection AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<div class="container mx-auto px-4 py-8 md:py-12">
+
+    <!-- Header -->
+    <header class="text-center mb-10">
+        <h1 class="text-4xl md:text-5xl font-bold text-blue-900">Fracture Detection AI</h1>
+        <p class="text-lg text-gray-600 mt-2">Leveraging AI for preliminary X-ray analysis.</p>
+    </header>
+
+    <!-- Upload Form -->
+    <main class="bg-white rounded-2xl shadow-xl p-6 md:p-10 max-w-2xl mx-auto">
+        <form action="{{ url_for('analyze_image') }}" method="POST" enctype="multipart/form-data">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4 text-center">Upload Your X-Ray Image</h2>
+
+            <div class="relative w-full h-64 md:h-80 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-500 mb-4">
+                <img id="image-preview" src="" alt="X-Ray Preview" class="hidden max-h-full max-w-full rounded-md object-contain">
+                <div id="placeholder-text" class="text-center">
+                    <p class="mt-2">Image preview will appear here</p>
+                </div>
+            </div>
+
+            <div class="flex justify-center mb-4">
+                <label for="file-upload" class="cursor-pointer inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    Select Image
+                </label>
+                <input id="file-upload" name="file-upload" type="file" class="sr-only" accept="image/png, image/jpeg, image/jpg" required>
+            </div>
+
+            <div class="flex justify-center">
+                <button type="submit" class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700">Analyze Image</button>
+            </div>
+        </form>
+    </main>
+
+</div>
+
+<script>
+    const fileInput = document.getElementById('file-upload');
+    const previewImg = document.getElementById('image-preview');
+    const placeholder = document.getElementById('placeholder-text');
+
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewImg.classList.remove('hidden');
+                placeholder.style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+</body>
+</html>

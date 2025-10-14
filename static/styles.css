@@ -1,0 +1,38 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.result-positive {
+    color: #D32F2F; /* Red for fracture */
+    border-color: #D32F2F;
+}
+
+.result-negative {
+    color: #388E3C; /* Green for no fracture */
+    border-color: #388E3C;
+}
+
+.loader {
+    border-top-color: #3498db;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.highlight-box {
+    position: absolute;
+    border: 3px solid red;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+    border-radius: 8px;
+    pointer-events: none; /* Allows clicks to go through to the image if needed */
+}
+.result-positive {
+    background-color: #ffcdd2;
+}
+
+.result-negative {
+    background-color: #C8E6C9;
+}
+
