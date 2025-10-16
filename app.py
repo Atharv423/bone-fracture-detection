@@ -42,6 +42,7 @@ def load_safe_densenet(model_path):
         model.load_weights(model_path)
         return model
 
+
 # Load DenseNet121 model once at startup
 model = load_safe_densenet('densenet.h5')
 
@@ -72,13 +73,19 @@ def analyze_image():
 
     # Prediction
     predictions = model.predict(img_array)
-    confidence = float(np.max(predictions))
-    predicted_class = class_labels[int(predictions[0][0] > 0.5)]
+    prob = float(predictions[0][0])  # probability of 'Fracture'
+
+    if prob > 0.5:
+        predicted_class = 'Fracture'
+        confidence = prob * 100
+    else:
+        predicted_class = 'Normal'
+        confidence = (1 - prob) * 100  # invert confidence for Normal
 
     return render_template(
         'result.html',
         result=predicted_class,
-        confidence=round(confidence * 100, 2),
+        confidence=round(confidence, 2),
         filename=filename
     )
 
