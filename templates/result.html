@@ -15,15 +15,39 @@
     </header>
 
     <main class="bg-white rounded-2xl shadow-xl p-6 md:p-10 max-w-2xl mx-auto text-center">
-        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Predicted Class: <span class="font-bold text-xl">{{ result }}</span></h2>
-        <!-- <p class="mb-4">Confidence: <span class="font-bold">{{ confidence }}%</span></p> --> --> -->
-        <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded X-Ray" class="mx-auto max-h-96 rounded-md">
+        <!-- Dynamic result color -->
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">
+            Predicted Class: 
+            {% if result == 'Normal' %}
+                <span class="font-bold text-green-600 text-xl">{{ result }}</span>
+            {% else %}
+                <span class="font-bold text-red-600 text-xl">{{ result }}</span>
+            {% endif %}
+        </h2>
 
+        <!-- Confidence display -->
+        <p class="mb-4 text-lg">
+            Confidence: 
+            <span class="font-bold {% if result == 'Normal' %}text-green-600{% else %}text-red-600{% endif %}">
+                {{ confidence }}%
+            </span>
+        </p>
+
+        <!-- Uploaded image -->
+        <img src="{{ url_for('static', filename='uploads/' + filename) }}" 
+             alt="Uploaded X-Ray" 
+             class="mx-auto max-h-96 rounded-md shadow-md border border-gray-200">
+
+        <!-- Action button -->
         <div class="mt-6 flex justify-center gap-4">
-            <a href="{{ url_for('upload_page') }}" class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700">Analyze Another Image</a>
+            <a href="{{ url_for('upload_page') }}" 
+               class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                Analyze Another Image
+            </a>
         </div>
     </main>
 
 </div>
 </body>
 </html>
+
