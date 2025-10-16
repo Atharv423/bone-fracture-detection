@@ -22,10 +22,12 @@
         <form action="{{ url_for('analyze_image') }}" method="POST" enctype="multipart/form-data">
             <h2 class="text-2xl font-semibold text-gray-700 mb-4 text-center">Upload Your X-Ray Image</h2>
 
-            <div class="relative w-full h-64 md:h-80 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-500 mb-4">
+            <!-- Drop Zone -->
+            <div id="drop-zone" 
+                 class="relative w-full h-64 md:h-80 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-500 mb-4 transition-all duration-300">
                 <img id="image-preview" src="" alt="X-Ray Preview" class="hidden max-h-full max-w-full rounded-md object-contain">
                 <div id="placeholder-text" class="text-center">
-                    <p class="mt-2">Image preview will appear here</p>
+                    <p class="mt-2">Drag & drop image here<br>or click “Select Image”</p>
                 </div>
             </div>
 
@@ -48,17 +50,44 @@
     const fileInput = document.getElementById('file-upload');
     const previewImg = document.getElementById('image-preview');
     const placeholder = document.getElementById('placeholder-text');
+    const dropZone = document.getElementById('drop-zone');
 
+    // Function to show image preview
+    function showPreview(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            previewImg.classList.remove('hidden');
+            placeholder.style.display = 'none';
+        }
+        reader.readAsDataURL(file);
+    }
+
+    // Regular file upload (click)
     fileInput.addEventListener('change', function() {
         const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewImg.src = e.target.result;
-                previewImg.classList.remove('hidden');
-                placeholder.style.display = 'none';
-            }
-            reader.readAsDataURL(file);
+        if (file) showPreview(file);
+    });
+
+    // Drag & Drop Events
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('border-blue-500', 'bg-blue-50');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+            fileInput.files = e.dataTransfer.files; // Sync with hidden input
+            showPreview(file);
+        } else {
+            alert("Please drop a valid image file.");
         }
     });
 </script>
